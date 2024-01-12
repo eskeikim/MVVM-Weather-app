@@ -6,5 +6,5 @@ data class Wind(
     @SerializedName("deg")
     val deg: Int?,
     @SerializedName("speed")
-    val speed: Int?,
+    val speed: Any?,
 )

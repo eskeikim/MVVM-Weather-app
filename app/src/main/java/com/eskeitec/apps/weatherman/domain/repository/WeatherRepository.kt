@@ -1,8 +1,8 @@
 package com.eskeitec.apps.weatherman.domain.repository
 
 import com.eskeitec.apps.weatherman.common.Resource
-import com.eskeitec.apps.weatherman.data.models.current.CurrentWeatherResponse
+import com.eskeitec.apps.weatherman.domain.model.WeatherModel
 
 interface WeatherRepository {
-    suspend fun getCurrentWeather(lat: String, lon: String): Resource<CurrentWeatherResponse>
+    suspend fun getCurrentWeather(lat: String, lon: String): Resource<WeatherModel>
 }

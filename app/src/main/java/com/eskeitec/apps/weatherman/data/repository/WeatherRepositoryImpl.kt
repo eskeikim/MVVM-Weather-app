@@ -2,7 +2,8 @@ package com.eskeitec.apps.weatherman.data.repository
 
 import com.eskeitec.apps.weatherman.common.Resource
 import com.eskeitec.apps.weatherman.data.datasource.network.WeatherApiService
-import com.eskeitec.apps.weatherman.data.models.current.CurrentWeatherResponse
+import com.eskeitec.apps.weatherman.domain.model.WeatherModel
+import com.eskeitec.apps.weatherman.domain.model.toWeatherModel
 import com.eskeitec.apps.weatherman.domain.repository.WeatherRepository
 import com.eskeitec.apps.weatherman.utils.Constants
 import com.eskeitec.apps.weatherman.utils.Constants.API_KEY
@@ -14,14 +15,15 @@ class WeatherRepositoryImpl @Inject constructor(private val weatherApiService: W
     override suspend fun getCurrentWeather(
         lat: String,
         lon: String,
-    ): Resource<CurrentWeatherResponse> {
+    ): Resource<WeatherModel> {
         val response = weatherApiService.getCurrentWeather(lat, lon, API_KEY)
 
         return try {
             if (response.isSuccessful && response.body() != null) {
                 val data = response.body()
-
-                Resource.success(data)
+                val cWeather = data?.toWeatherModel()
+                println("Current Weather == $cWeather")
+                Resource.success(cWeather)
             } else {
                 Resource.error(null, Constants.DEFAULT_ERROR)
             }
