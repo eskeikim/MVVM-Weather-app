@@ -1,6 +1,7 @@
 package com.eskeitec.apps.weatherman.domain.model
 
 import com.eskeitec.apps.weatherman.data.models.current.CurrentWeatherResponse
+import kotlin.math.roundToInt
 
 data class WeatherModel(
     val id: Long,
@@ -19,11 +20,14 @@ enum class WeatherType {
 }
 
 fun CurrentWeatherResponse.toWeatherModel(): WeatherModel {
+    val temp = this.main?.temp?.minus(273.15)?.roundToInt()
+    val minTemp = this.main?.tempMin?.minus(273.15)?.roundToInt()
+    val maxTemp = this.main?.tempMax?.minus(273.15)?.roundToInt()
     return WeatherModel(
         id = this.id?.toLong()!!,
-        temp = "${this.main?.temp}",
-        minTemp = "${this.main?.tempMin}",
-        maxTemp = "${this.main?.tempMax}",
+        temp = "$temp",
+        minTemp = "$minTemp",
+        maxTemp = "$maxTemp",
         weatherType = getWeatherType(this.weather?.first()?.main),
 
     )

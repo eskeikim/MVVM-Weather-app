@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,7 +34,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.R
+import com.eskeitec.apps.weatherman.domain.model.WeatherType
+import com.eskeitec.apps.weatherman.ui.theme.GreenColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentWeatherScreen(
     navController: NavHostController,
@@ -51,48 +56,49 @@ fun CurrentWeatherScreen(
         )
         return
     }
-    Card(modifier = Modifier.fillMaxSize().background(color = Color.Green)) {
-        Column(modifier = Modifier.padding(8.dp).fillMaxSize().background(color = Color.Green)) {
+//    val temp= Integer.parseInt(state.temp.toDouble())
+
+    Card(modifier = Modifier.fillMaxSize().background(color = Color.Gray)) {
+        Column(modifier = Modifier.fillMaxSize().background(color = GreenColor)) {
             Box(modifier = Modifier.padding(0.dp), contentAlignment = Alignment.Center) {
                 Image(
-                    modifier = Modifier.fillMaxWidth().height(400.dp),
-                    painter = painterResource(id = R.drawable.forest_cloudy),
+                    modifier = Modifier.fillMaxWidth(2f).height(400.dp),
+                    painter = painterResource(id = getBgImage(state.weatherType)),
                     contentDescription = "background image",
                     contentScale = ContentScale.FillWidth,
                 )
 
-                Column(modifier = Modifier.padding(8.dp)) {
+                Column(modifier = Modifier.padding(0.dp).align(Center)) {
                     Text(
                         text = "${state.temp}º",
-                        modifier = Modifier.align(CenterHorizontally).padding(vertical = 20.dp),
+                        modifier = Modifier.align(CenterHorizontally).padding(vertical = 0.dp),
                         style = TextStyle(
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.Monospace,
+                            fontSize = 35.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontFamily = FontFamily.SansSerif,
                         ),
                         color = Color.White,
                         textAlign = TextAlign.Center,
                     )
                     Text(
                         text = state.weatherType.name,
-                        modifier = Modifier.align(CenterHorizontally).padding(vertical = 10.dp),
+                        modifier = Modifier.align(CenterHorizontally).padding(vertical = 50.dp),
                         style = TextStyle(
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = FontFamily.SansSerif,
                         ),
                         color = Color.White,
                         textAlign = TextAlign.Center,
-
-                        )
+                    )
                 }
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(10.dp).background(color = Color.Green),
+                modifier = Modifier.fillMaxWidth(2f).padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "${state.minTemp}º \n min",
+                    text = " ${state.minTemp}º \n Min",
                     modifier = Modifier.padding(horizontal = 0.dp),
                     style = TextStyle(
                         fontSize = 18.sp,
@@ -102,9 +108,20 @@ fun CurrentWeatherScreen(
                     color = Color.White,
                     textAlign = TextAlign.Start,
 
-                    )
+                )
                 Text(
-                    text = "${state.temp}º\n current",
+                    text = "${state.temp}º\nCurrent",
+                    modifier = Modifier.padding(horizontal = 0.dp),
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Monospace,
+                    ),
+                    color = Color.White,
+                    textAlign = TextAlign.End,
+                )
+                Text(
+                    text = "${state.maxTemp}º\n Max",
                     modifier = Modifier.padding(horizontal = 0.dp),
                     style = TextStyle(
                         fontSize = 18.sp,
@@ -114,20 +131,18 @@ fun CurrentWeatherScreen(
                     color = Color.White,
                     textAlign = TextAlign.End,
 
-                    )
-                Text(
-                    text = "${state.maxTemp}º\n max",
-                    modifier = Modifier.padding(horizontal = 0.dp),
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Monospace,
-                    ),
-                    color = Color.White,
-                    textAlign = TextAlign.End,
-
-                    )
+                )
             }
+            Divider(color = Color.White, thickness = 2.dp)
         }
+    }
+}
+
+fun getBgImage(weatherType: WeatherType): Int {
+    return when (weatherType) {
+        WeatherType.SUNNY -> R.drawable.forest_sunny
+        WeatherType.WINDLY -> R.drawable.forest_cloudy
+        WeatherType.RAINY -> R.drawable.forest_rainy
+        else -> R.drawable.forest_cloudy
     }
 }
