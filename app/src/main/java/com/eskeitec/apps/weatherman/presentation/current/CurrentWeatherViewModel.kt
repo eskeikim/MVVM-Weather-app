@@ -1,6 +1,5 @@
 package com.eskeitec.apps.weatherman.presentation.current
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,19 +21,11 @@ class CurrentWeatherViewModel @Inject constructor(private val weatherUseCase: We
     val currentWeatherState = _currentWeatherState.asStateFlow()
 
     private var _currentWeather = MutableLiveData<WeatherModel?>()
-    val currentWeather: LiveData<WeatherModel?>
-        get() = _currentWeather
 
-    init {
-        val lat = "-1.286389"
-        val lon = "36.817223"
-        getCurrentWeatherData(lat, lon)
-    }
-
-    private fun getCurrentWeatherData(lat: String, lon: String) {
+    fun getCurrentWeatherData(lat: String, lon: String) {
         _currentWeatherState.value = CurrentWeatherState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val response = weatherUseCase.getCurrentWeather(lat, lon)
+            val response = weatherUseCase.invoke(lat, lon)
             when (response) {
                 is Resource.Success ->
                     _currentWeatherState.value =
@@ -44,7 +35,6 @@ class CurrentWeatherViewModel @Inject constructor(private val weatherUseCase: We
                     _currentWeatherState.value =
                         CurrentWeatherState.Error(response.message)
             }
-//            _currentWeather.value = response.data
         }
     }
 }

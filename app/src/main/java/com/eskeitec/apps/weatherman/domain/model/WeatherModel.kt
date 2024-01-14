@@ -86,7 +86,6 @@ fun getWeatherType(main: String?): WeatherType {
     return when (main) {
         "Rain" -> WeatherType.RAINY
         "Clouds" -> WeatherType.CLOUDY
-        "wind" -> WeatherType.WINDLY
         else -> WeatherType.SUNNY
     }
 }

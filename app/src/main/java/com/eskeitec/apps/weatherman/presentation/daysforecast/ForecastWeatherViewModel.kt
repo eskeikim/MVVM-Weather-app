@@ -13,19 +13,19 @@ import javax.inject.Inject
 @HiltViewModel
 class ForecastWeatherViewModel @Inject constructor(private val weatherUseCase: ForecastWeatherUseCase) :
     ViewModel() {
-    private var _forecastWeather = MutableLiveData<ForecastModel>()
-    val forecastWeather: LiveData<ForecastModel>
+    private var _forecastWeather = MutableLiveData<ForecastModel?>()
+    val forecastWeather: LiveData<ForecastModel?>
         get() = _forecastWeather
 
-    init {
-        val lat = "-1.286389"
-        val lon = "36.817223"
-        getForecastWeatherData(lat, lon)
-    }
+//    init {
+//        val lat = "-1.286389"
+//        val lon = "36.817223"
+//        getForecastWeatherData(lat, lon)
+//    }
 
-    private fun getForecastWeatherData(lat: String, lon: String) {
+    fun getForecastWeatherData(lat: String, lon: String) {
         viewModelScope.launch {
-            val response = weatherUseCase.getDayForecast(lat, lon)
+            val response = weatherUseCase.invoke(lat, lon)
             _forecastWeather.value = response.data
         }
     }
