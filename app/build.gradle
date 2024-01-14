@@ -20,6 +20,31 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        Properties properties = new Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(
+                    rootProject
+                            .file("local.properties")
+                            .newDataInputStream()
+            )
+        }
+
+        buildConfigField(
+                "String",
+                "MAPS_API_KEY",
+                properties.getProperty("MAPS_API_KEY")
+        )
+        buildConfigField(
+                "String",
+                "OPEN_API_KEY",
+                properties.getProperty("OPEN_API_KEY")
+        )
+        buildConfigField(
+                "String",
+                "BASE_URL",
+                properties.getProperty("BASE_URL")
+        )
     }
 
     buildTypes {
@@ -46,7 +71,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
     }
 }
