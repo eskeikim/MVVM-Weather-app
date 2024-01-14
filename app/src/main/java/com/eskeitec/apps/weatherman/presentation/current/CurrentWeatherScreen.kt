@@ -46,15 +46,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.eskeitec.apps.weatherman.R
 import com.eskeitec.apps.weatherman.common.SetError
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
-import com.eskeitec.apps.weatherman.domain.model.WeatherType
+import com.eskeitec.apps.weatherman.presentation.Screen
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
 import com.eskeitec.apps.weatherman.presentation.daysforecast.ForecastScreen
-import com.eskeitec.apps.weatherman.ui.theme.cloudyBg
-import com.eskeitec.apps.weatherman.ui.theme.rainyBg
-import com.eskeitec.apps.weatherman.ui.theme.sunnyBg
 import com.eskeitec.apps.weatherman.utils.Constants
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBGColor
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBgImage
@@ -94,7 +90,9 @@ fun CurrentWeatherScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = {
+                navController.navigate(Screen.AddLocation.name)
+            }) {
                 Icon(Icons.Rounded.Add, contentDescription = "Add")
             }
         },
@@ -284,4 +282,3 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
         }
     }
 }
-

@@ -1,4 +1,4 @@
-package com.eskeitec.apps.weatherman.presentation.add_location
+package com.eskeitec.apps.weatherman.presentation.addlocation
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -22,6 +22,7 @@ class AddLocationViewModel @Inject constructor(private val placesRepository: Pla
             val response = placesRepository.getPlaces(address)
             when (response) {
                 is Resource.Success -> {
+                    println("Loaded VM data ${response.data?.size} :: ${response.data?.first()}")
                     places.value = ArrayList(response.data!!)
                 }
 

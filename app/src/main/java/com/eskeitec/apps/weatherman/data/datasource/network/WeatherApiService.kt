@@ -22,4 +22,5 @@ interface WeatherApiService {
         @Query("appid") appKey: String,
         @Query("units") units: String = "metric",
     ): Response<ForecastResponse>
+
 }

@@ -30,12 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.eskeitec.apps.weatherman.common.extension.hasLocationPermission
+import com.eskeitec.apps.weatherman.presentation.components.ComposeNavigation
 import com.eskeitec.apps.weatherman.presentation.components.RationaleAlert
-import com.eskeitec.apps.weatherman.presentation.current.CurrentWeatherScreen
 import com.eskeitec.apps.weatherman.presentation.states.PermissionEvent
 import com.eskeitec.apps.weatherman.presentation.states.ViewState
 import com.eskeitec.apps.weatherman.ui.theme.WeatherManTheme
@@ -123,12 +120,7 @@ class MainActivity : ComponentActivity() {
                                         this.location?.latitude ?: 0.0,
                                         this.location?.longitude ?: 0.0,
                                     )
-                                val navController = rememberNavController()
-                                NavHost(navController, Screen.current.name) {
-                                    composable(route = Screen.current.name) {
-                                        CurrentWeatherScreen(navController, currentLoc = currentLoc)
-                                    }
-                                }
+                                ComposeNavigation(currentLoc)
                             }
                         }
                     }

@@ -1,4 +1,4 @@
-package com.eskeitec.apps.weatherman.presentation.add_location
+package com.eskeitec.apps.weatherman.presentation.addlocation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
@@ -21,7 +21,7 @@ fun AddLocationScreen(
     navController: NavController,
     viewModel: AddLocationViewModel = hiltViewModel(),
 ) {
-    viewModel.getPlaces("Nairobi")
+    viewModel.getPlaces("Nai")
     val state = viewModel.loading.value
     if (state) {
         return Box(contentAlignment = Alignment.Center) {

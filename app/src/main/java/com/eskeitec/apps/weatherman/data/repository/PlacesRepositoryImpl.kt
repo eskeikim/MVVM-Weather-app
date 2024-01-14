@@ -1,23 +1,26 @@
 package com.eskeitec.apps.weatherman.data.repository
 
 import com.eskeitec.apps.weatherman.common.Resource
-import com.eskeitec.apps.weatherman.data.datasource.network.PlacesApi
+import com.eskeitec.apps.weatherman.data.datasource.network.PlacesRemoteDataSource
 import com.eskeitec.apps.weatherman.data.models.google_places.Prediction
 import com.eskeitec.apps.weatherman.utils.Constants
 import java.lang.Exception
 import javax.inject.Inject
 
-class PlacesRepository @Inject constructor(private val api: PlacesApi) {
-    suspend fun getPlaces(input: String): Resource<List<Prediction>> {
-        val response = api.getPlaces(input = input)
-        try {
+class PlacesRepositoryImpl @Inject constructor(private val placesRemoteDataSource: PlacesRemoteDataSource) :
+    PlacesRepository {
+    override suspend fun getPlaces(input: String): Resource<List<Prediction>> {
+        val response = placesRemoteDataSource.getPlaces(input = input)
+        return try {
+            println("Loaded Repos data ${response.status}")
             if (response.predictions == null) {
-                return Resource.Error(Constants.DEFAULT_ERROR)
+                Resource.Error(Constants.DEFAULT_ERROR)
             } else {
+                println("Loaded Repos data ${response.predictions.size} :: ${response.predictions.first()}")
                 Resource.Success(response.predictions)
             }
         } catch (e: Exception) {
-            return Resource.Error("Failed to get location places")
+            Resource.Error("Failed to get location places")
         }
     }
 }
