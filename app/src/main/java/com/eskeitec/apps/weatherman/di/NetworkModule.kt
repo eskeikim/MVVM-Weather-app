@@ -1,8 +1,7 @@
 package com.eskeitec.apps.weatherman.di
 
-import androidx.multidex.BuildConfig
+import com.eskeitec.apps.weatherman.BuildConfig
 import com.eskeitec.apps.weatherman.data.datasource.network.WeatherApiService
-import com.eskeitec.apps.weatherman.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +25,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesBaseUrl(): String {
-        return Constants.BASE_URL
+        return BuildConfig.BASE_URL
     }
 
     @Singleton

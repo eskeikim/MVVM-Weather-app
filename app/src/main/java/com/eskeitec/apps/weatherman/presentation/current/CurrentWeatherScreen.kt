@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
@@ -40,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -55,8 +52,13 @@ import com.eskeitec.apps.weatherman.domain.model.WeatherModel
 import com.eskeitec.apps.weatherman.domain.model.WeatherType
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
 import com.eskeitec.apps.weatherman.presentation.daysforecast.ForecastScreen
-import com.eskeitec.apps.weatherman.ui.theme.GreenColor
+import com.eskeitec.apps.weatherman.ui.theme.cloudyBg
+import com.eskeitec.apps.weatherman.ui.theme.rainyBg
+import com.eskeitec.apps.weatherman.ui.theme.sunnyBg
 import com.eskeitec.apps.weatherman.utils.Constants
+import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBGColor
+import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBgImage
+import com.google.android.gms.maps.model.LatLng
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,22 +66,12 @@ import com.eskeitec.apps.weatherman.utils.Constants
 fun CurrentWeatherScreen(
     navController: NavHostController,
     weatherViewModel: CurrentWeatherViewModel = hiltViewModel(),
+    currentLoc: LatLng,
 ) {
     println("Viewmodel init>>>")
-//    val state = weatherViewModel.currentWeather.observeAsState().value
-    val state1 = weatherViewModel.currentWeatherState.collectAsState()
+    weatherViewModel.getCurrentWeatherData("${currentLoc.latitude}", "${currentLoc.longitude}")
     val state by weatherViewModel.currentWeatherState.collectAsState()
-    println("Viewmodel init>>> State $state")
-//    if (state == null) {
-//        Text(
-//            text = "Oops! Something Went Wrong",
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight()
-//                .padding(32.dp),
-//        )
-//        return
-//    }
+//    println("Viewmodel init>>> State $state")
 
     Scaffold(
         topBar = {
@@ -108,12 +100,12 @@ fun CurrentWeatherScreen(
         },
 
     ) {
-        BodyLayout(state = state)
+        BodyLayout(state = state, currentLoc)
     }
 }
 
 @Composable
-fun BodyLayout(state: CurrentWeatherState) {
+fun BodyLayout(state: CurrentWeatherState, currentLoc: LatLng) {
     return when (state) {
         is CurrentWeatherState.Loading -> {
             Box(contentAlignment = Alignment.Center) {
@@ -128,9 +120,9 @@ fun BodyLayout(state: CurrentWeatherState) {
             if (state.data == null) {
                 ErrorCard(
                     modifier = Modifier.fillMaxSize(),
-                    errorTitle = Constants.UNKNOWN_ERROR,
+                    errorTitle = Constants.DEFAULT_ERROR,
                     errorDescription = SetError.setErrorCard(
-                        Constants.UNKNOWN_ERROR,
+                        Constants.DEFAULT_ERROR,
                     ),
                     errorButtonText = "Ok",
                     {},
@@ -140,16 +132,16 @@ fun BodyLayout(state: CurrentWeatherState) {
                         .padding(horizontal = 64.dp),
                 )
             }
-            WeatherScreen(state.data!!)
+            WeatherScreen(state.data!!, currentLoc)
         }
 
         is CurrentWeatherState.Error -> {
             ErrorCard(
                 modifier = Modifier.fillMaxSize(),
                 errorTitle = state.error
-                    ?: Constants.UNKNOWN_ERROR,
+                    ?: Constants.DEFAULT_ERROR,
                 errorDescription = SetError.setErrorCard(
-                    state.error ?: Constants.UNKNOWN_ERROR,
+                    state.error ?: Constants.DEFAULT_ERROR,
                 ),
                 errorButtonText = "Ok",
                 {},
@@ -163,7 +155,7 @@ fun BodyLayout(state: CurrentWeatherState) {
 }
 
 @Composable
-fun WeatherScreen(state: WeatherModel) {
+fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -172,7 +164,7 @@ fun WeatherScreen(state: WeatherModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = GreenColor),
+                .background(color = getBGColor(state.weatherType)),
         ) {
             Box(modifier = Modifier.padding(0.dp), contentAlignment = Alignment.Center) {
                 Image(
@@ -186,14 +178,14 @@ fun WeatherScreen(state: WeatherModel) {
 
                 Column(
                     modifier = Modifier
-                        .padding(0.dp)
+                        .padding(60.dp)
                         .align(TopCenter),
                 ) {
                     Text(
                         text = "${state.city} ${state.country}",
                         modifier = Modifier
                             .align(CenterHorizontally)
-                            .padding(vertical = 20.dp),
+                            .padding(vertical = 10.dp),
                         style = TextStyle(
                             fontSize = 30.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -288,25 +280,8 @@ fun WeatherScreen(state: WeatherModel) {
                 )
             }
             Divider(color = Color.White, thickness = 2.dp)
-            ForecastScreen()
+            ForecastScreen(currentLoc = currentLoc)
         }
     }
 }
 
-fun getBgImage(weatherType: WeatherType): Int {
-    return when (weatherType) {
-        WeatherType.SUNNY -> R.drawable.forest_sunny
-        WeatherType.WINDLY -> R.drawable.forest_cloudy
-        WeatherType.RAINY -> R.drawable.forest_rainy
-        else -> R.drawable.forest_cloudy
-    }
-}
-
-fun getWeatherIcon(weatherType: WeatherType): Int {
-    return when (weatherType) {
-        WeatherType.SUNNY -> R.drawable.clear_3x
-        WeatherType.WINDLY -> R.drawable.partlysunny_2x
-        WeatherType.RAINY -> R.drawable.rain_3x
-        else -> R.drawable.partlysunny_3x
-    }
-}

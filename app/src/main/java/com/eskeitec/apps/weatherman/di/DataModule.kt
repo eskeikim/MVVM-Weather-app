@@ -5,9 +5,7 @@ import com.eskeitec.apps.weatherman.data.datasource.network.WeatherApiService
 import com.eskeitec.apps.weatherman.data.repository.WeatherRepositoryImpl
 import com.eskeitec.apps.weatherman.domain.repository.WeatherRepository
 import com.eskeitec.apps.weatherman.domain.usecase.ForecastWeatherUseCase
-import com.eskeitec.apps.weatherman.domain.usecase.ForecastWeatherUseCaseImpl
 import com.eskeitec.apps.weatherman.domain.usecase.WeatherUseCase
-import com.eskeitec.apps.weatherman.domain.usecase.WeatherUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,9 +29,9 @@ object DataModule {
     @Provides
     @Singleton
     fun providesWeatherUseCase(weatherRepository: WeatherRepository): WeatherUseCase =
-        WeatherUseCaseImpl(weatherRepository)
+        WeatherUseCase(weatherRepository)
     @Provides
     @Singleton
     fun providesForecastWeatherUseCase(weatherRepository: WeatherRepository): ForecastWeatherUseCase =
-        ForecastWeatherUseCaseImpl(weatherRepository)
+        ForecastWeatherUseCase(weatherRepository)
 }
