@@ -6,7 +6,6 @@ import com.eskeitec.apps.weatherman.utils.EpochConverter
 import com.eskeitec.apps.weatherman.utils.Utils
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.HOUR_TIME_FORMAT
 import java.util.Calendar
-import kotlin.math.roundToInt
 
 data class WeatherModel(
     val id: Long,
@@ -29,9 +28,9 @@ enum class WeatherType {
 }
 
 fun CurrentWeatherResponse.toWeatherModel(): WeatherModel {
-    val temp = this.main?.temp?.minus(273.15)?.roundToInt()
-    val minTemp = this.main?.tempMin?.minus(273.15)?.roundToInt()
-    val maxTemp = this.main?.tempMax?.minus(273.15)?.roundToInt()
+    val temp = this.main?.temp?.toInt()
+    val minTemp = this.main?.tempMin?.toInt()
+    val maxTemp = this.main?.tempMax?.toInt()
     return WeatherModel(
         id = this.id?.toLong()!!,
         temp = "$temp",
@@ -57,12 +56,12 @@ fun ForecastResponse.toForecastModel(): ForecastModel {
     val city = this.city?.name
     val country = this.city?.country
     for (item in weather) {
-        val temp = item.main?.temp?.minus(273.15)?.roundToInt()
-        val minTemp = item.main?.tempMin?.minus(273.15)?.roundToInt()
-        val maxTemp = item.main?.tempMax?.minus(273.15)?.roundToInt()
+        val temp = item.main?.temp?.toInt()
+        val minTemp = item.main?.tempMin?.toInt()
+        val maxTemp = item.main?.tempMax?.toInt()
 
         val model = WeatherModel(
-            id = item.dt?.toLong() ?: -1L,
+            id = item.dt ?: -1L,
             temp = "$temp",
             minTemp = "$minTemp",
             maxTemp = "$maxTemp",

@@ -12,6 +12,7 @@ interface WeatherApiService {
         @Query("lat") lat: String,
         @Query("lon") lon: String,
         @Query("appid") appKey: String,
+        @Query("units") units: String = "metric",
     ): Response<CurrentWeatherResponse>
 
     @GET("forecast")
@@ -19,5 +20,6 @@ interface WeatherApiService {
         @Query("lat") lat: String,
         @Query("lon") lon: String,
         @Query("appid") appKey: String,
+        @Query("units") units: String = "metric",
     ): Response<ForecastResponse>
 }
