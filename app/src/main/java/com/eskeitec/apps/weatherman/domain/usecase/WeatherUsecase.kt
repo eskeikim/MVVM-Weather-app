@@ -1,7 +1,6 @@
 package com.eskeitec.apps.weatherman.domain.usecase
 
 import com.eskeitec.apps.weatherman.common.Resource
-import com.eskeitec.apps.weatherman.data.models.current.CurrentWeatherResponse
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
 import com.eskeitec.apps.weatherman.domain.repository.WeatherRepository
 import javax.inject.Inject
