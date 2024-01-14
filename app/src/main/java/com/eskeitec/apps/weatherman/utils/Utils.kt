@@ -1,5 +1,11 @@
 package com.eskeitec.apps.weatherman.utils
 
+import androidx.compose.ui.graphics.Color
+import com.eskeitec.apps.weatherman.R
+import com.eskeitec.apps.weatherman.domain.model.WeatherType
+import com.eskeitec.apps.weatherman.ui.theme.cloudyBg
+import com.eskeitec.apps.weatherman.ui.theme.rainyBg
+import com.eskeitec.apps.weatherman.ui.theme.sunnyBg
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -11,7 +17,7 @@ class Utils {
         val SIMPLE_DATE_TIME_FORMAT = "dd-MMM-yyyy hh:mm:ss a"
         val HOUR_TIME_FORMAT = "hh a"
         val DATE_TIME_FORMAT = "MMM dd"
-        val DAY_TIME_FORMAT = "EEEE hh a"
+        val DAY_TIME_FORMAT = "EEEE hh:mm a"
 
         fun getDateFromTime(time: Long, targetFormat: String): String? {
             return try {
@@ -47,7 +53,36 @@ class Utils {
                 calendar.set(year, month, day)
                 val outputDateFormat = SimpleDateFormat("EE", Locale.getDefault())
                 return outputDateFormat.format(calendar.time)
-            } else null
+            } else {
+                null
+            }
+        }
+
+        fun getBGColor(weatherType: WeatherType): Color {
+            return when (weatherType) {
+                WeatherType.SUNNY -> rainyBg
+                WeatherType.WINDLY -> sunnyBg
+                WeatherType.RAINY -> rainyBg
+                else -> cloudyBg
+            }
+        }
+
+        fun getBgImage(weatherType: WeatherType): Int {
+            return when (weatherType) {
+                WeatherType.SUNNY -> R.drawable.forest_sunny
+                WeatherType.WINDLY -> R.drawable.forest_cloudy
+                WeatherType.RAINY -> R.drawable.forest_rainy
+                else -> R.drawable.forest_cloudy
+            }
+        }
+
+        fun getWeatherIcon(weatherType: WeatherType): Int {
+            return when (weatherType) {
+                WeatherType.SUNNY -> R.drawable.clear_3x
+                WeatherType.WINDLY -> R.drawable.partlysunny_2x
+                WeatherType.RAINY -> R.drawable.rain_3x
+                else -> R.drawable.partlysunny_2x
+            }
         }
     }
 }

@@ -114,6 +114,15 @@ dependencies {
     //multidex
     implementation "androidx.multidex:multidex:$multidex_version"
 
+    //Google Services & Maps
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation "com.google.maps.android:maps-compose:$maps_compose_version"
+    implementation "com.google.android.gms:play-services-maps:$play_services_maps_version"
+
+    //Accompanist (Permission)
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_permissions_version"
+
+
     /* Hilt Dagger */
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
