@@ -1,17 +1,26 @@
 package com.eskeitec.apps.weatherman.presentation.current
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -135,7 +144,6 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                     Text(
                         text = "${state.city} ${state.country}",
                         modifier = Modifier
-                            .align(CenterHorizontally)
                             .padding(vertical = 10.dp),
                         style = TextStyle(
                             fontSize = 30.sp,
@@ -159,20 +167,32 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                         color = Color.White,
                         textAlign = TextAlign.Center,
                     )
-
-                    Text(
-                        text = "${state.temp}º",
-                        modifier = Modifier
-                            .align(CenterHorizontally)
-                            .padding(vertical = 0.dp),
-                        style = TextStyle(
-                            fontSize = 50.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontFamily = FontFamily.SansSerif,
-                        ),
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                    )
+                    Row(modifier = Modifier.padding(), horizontalArrangement = Arrangement.Center) {
+                        Text(
+                            text = "${state.temp}º",
+                            modifier = Modifier
+                                .padding(vertical = 0.dp),
+                            style = TextStyle(
+                                fontSize = 50.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontFamily = FontFamily.SansSerif,
+                            ),
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 20.dp))
+                        IconButton(
+                            onClick = {
+                            },
+                        ) {
+                            Icon(
+                                Icons.Outlined.Favorite,
+                                contentDescription = "Add to favourite",
+                                tint = Color.White,
+                                modifier = Modifier.size(100.dp).padding(top = 10.dp),
+                            )
+                        }
+                    }
                     Text(
                         text = state.weatherType.name,
                         modifier = Modifier
