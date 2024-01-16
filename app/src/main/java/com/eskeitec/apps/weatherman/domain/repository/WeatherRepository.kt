@@ -14,4 +14,6 @@ interface WeatherRepository {
 
     fun getAllFavouriteLocationsL(): LiveData<List<LocationEntity>>
     suspend fun getAllFavouriteLocations(): List<LocationEntity>
+
+    suspend fun removeLocation(locationEntity: LocationEntity)
 }

@@ -18,5 +18,5 @@ class LocationLocalDataSource @Inject constructor(private val locationDao: Locat
     fun getLocation(locationId: String): LiveData<LocationEntity> =
         locationDao.getLocation(locationId)
 
-    fun removeLocation(location: LocationEntity) = locationDao.removeLocation(location)
+    suspend fun removeLocation(location: LocationEntity) = locationDao.removeLocation(location)
 }

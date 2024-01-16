@@ -21,6 +21,9 @@ class FavouritesViewModel @Inject constructor(
     private var _favourites = MutableLiveData<List<LocationEntity>>()
     val favourites: LiveData<List<LocationEntity>>
         get() = _favourites
+    private var _isFavouriteAdded = MutableLiveData<Boolean>()
+    val isFavouriteAdded: LiveData<Boolean>
+        get() = _isFavouriteAdded
 
     init {
         getAllLocations()
@@ -35,8 +38,16 @@ class FavouritesViewModel @Inject constructor(
     }
 
     fun addLocationToFavourite(locationEntity: LocationEntity) {
+        _isFavouriteAdded.value = true
         viewModelScope.launch {
             favouriteLocationUseCase.invoke(locationEntity)
+        }
+    }
+
+    fun isFavouriteRemoved(locationEntity: LocationEntity) {
+        _isFavouriteAdded.value = false
+        viewModelScope.launch {
+            favouriteLocationUseCase.removeLocation(locationEntity)
         }
     }
 }

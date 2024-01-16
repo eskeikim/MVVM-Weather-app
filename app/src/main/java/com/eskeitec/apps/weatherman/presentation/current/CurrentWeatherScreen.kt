@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -47,6 +48,7 @@ import com.eskeitec.apps.weatherman.domain.model.toLocationEntity
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
 import com.eskeitec.apps.weatherman.presentation.components.LoadingDialog
 import com.eskeitec.apps.weatherman.presentation.daysforecast.ForecastScreen
+import com.eskeitec.apps.weatherman.presentation.favourites.FavouritesViewModel
 import com.eskeitec.apps.weatherman.utils.Constants
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBGColor
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBgImage
@@ -127,8 +129,9 @@ fun WeatherScreen(
     state: WeatherModel,
     currentLoc: LatLng,
     weatherViewModel: CurrentWeatherViewModel,
+    favouritesViewModel: FavouritesViewModel = hiltViewModel(),
 ) {
-    val isFavourite = weatherViewModel.isFavouriteAdded.observeAsState().value
+    val isFavourite = favouritesViewModel.isFavouriteAdded.observeAsState().value
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -196,8 +199,13 @@ fun WeatherScreen(
                         Spacer(modifier = Modifier.padding(horizontal = 20.dp))
                         IconButton(
                             onClick = {
-                                weatherViewModel.addLocationToFavourite(state.toLocationEntity())
-                                weatherViewModel.isFavouriteAdded(isFavourite != true)
+                                if (isFavourite == true) {
+                                    favouritesViewModel.isFavouriteRemoved(state.toLocationEntity())
+                                } else {
+                                    favouritesViewModel.addLocationToFavourite(
+                                        state.toLocationEntity(),
+                                    )
+                                }
                             },
                         ) {
                             if (isFavourite == true) {
@@ -211,7 +219,7 @@ fun WeatherScreen(
                                 )
                             } else {
                                 Icon(
-                                    Icons.Outlined.Favorite,
+                                    Icons.Outlined.FavoriteBorder,
                                     contentDescription = "Add to favourite",
                                     modifier = Modifier
                                         .size(100.dp)

@@ -28,5 +28,5 @@ interface LocationDao {
     fun getLocation(locationId: String): LiveData<LocationEntity>
 
     @Delete
-    fun removeLocation(location: LocationEntity)
+    suspend fun removeLocation(location: LocationEntity)
 }

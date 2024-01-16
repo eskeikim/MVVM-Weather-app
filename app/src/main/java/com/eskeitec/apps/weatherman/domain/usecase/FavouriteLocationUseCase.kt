@@ -8,4 +8,7 @@ class FavouriteLocationUseCase @Inject constructor(private val weatherRepository
 
     suspend fun invoke(locationEntity: LocationEntity) =
         weatherRepository.insertFavouriteLocation(locationEntity)
+
+    suspend fun removeLocation(locationEntity: LocationEntity) =
+        weatherRepository.removeLocation(locationEntity)
 }

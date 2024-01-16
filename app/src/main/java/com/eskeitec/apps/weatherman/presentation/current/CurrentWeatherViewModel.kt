@@ -24,9 +24,6 @@ class CurrentWeatherViewModel @Inject constructor(
         MutableStateFlow<CurrentWeatherState>(CurrentWeatherState.Loading)
     val currentWeatherState = _currentWeatherState.asStateFlow()
 
-    private var _isFavouriteAdded = MutableLiveData<Boolean>()
-    val isFavouriteAdded: LiveData<Boolean>
-        get() = _isFavouriteAdded
 
     fun getCurrentWeatherData(lat: String, lon: String) {
         _currentWeatherState.value = CurrentWeatherState.Loading
@@ -42,16 +39,5 @@ class CurrentWeatherViewModel @Inject constructor(
                         CurrentWeatherState.Error(response.message)
             }
         }
-    }
-
-    fun addLocationToFavourite(locationEntity: LocationEntity) {
-        viewModelScope.launch {
-            favouriteLocationUseCase.invoke(locationEntity)
-        }
-    }
-
-    fun isFavouriteAdded(isAdded: Boolean = true) {
-        _isFavouriteAdded.value = isAdded
-
     }
 }

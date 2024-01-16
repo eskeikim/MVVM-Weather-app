@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -97,7 +96,7 @@ fun ListFavouritesScreen(
                 Box(modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp)) {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(locations) { item ->
-                            FavouriteItem(item, navController)
+                            FavouriteItem(item, navController, favouritesViewModel)
                         }
                     }
                 }
@@ -107,8 +106,13 @@ fun ListFavouritesScreen(
 }
 
 @Composable
-fun FavouriteItem(item: LocationEntity, navController: NavHostController) {
-    var isFavourite = true
+fun FavouriteItem(
+    item: LocationEntity,
+    navController: NavHostController,
+    favouritesViewModel: FavouritesViewModel,
+) {
+//    val isFavourite = favouritesViewModel.isFavouriteAdded.value
+    val isFavourite = true
     val latlon = item.latlog
     Card(
         modifier = Modifier
@@ -144,10 +148,16 @@ fun FavouriteItem(item: LocationEntity, navController: NavHostController) {
             )
             IconButton(
                 onClick = {
-                    isFavourite = false
+                    if (isFavourite == true) {
+                        favouritesViewModel.isFavouriteRemoved(item)
+                    } else {
+                        favouritesViewModel.addLocationToFavourite(
+                            item,
+                        )
+                    }
                 },
             ) {
-                if (isFavourite) {
+                if (isFavourite == true) {
                     Icon(
                         Icons.Filled.Favorite,
                         contentDescription = "Add to favourite",
@@ -159,7 +169,7 @@ fun FavouriteItem(item: LocationEntity, navController: NavHostController) {
                     Icon(
                         Icons.Outlined.FavoriteBorder,
                         contentDescription = "Add to favourite",
-                        tint = Color.Black,
+                        tint = Color.LightGray,
                         modifier = Modifier
                             .size(100.dp),
                     )

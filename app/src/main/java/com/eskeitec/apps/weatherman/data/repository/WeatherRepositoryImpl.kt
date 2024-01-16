@@ -67,4 +67,8 @@ class WeatherRepositoryImpl @Inject constructor(
     override suspend fun getAllFavouriteLocations(): List<LocationEntity> {
         return localDataSource.getAllLocations()
     }
+
+    override suspend fun removeLocation(locationEntity: LocationEntity) {
+        localDataSource.removeLocation(locationEntity)
+    }
 }
