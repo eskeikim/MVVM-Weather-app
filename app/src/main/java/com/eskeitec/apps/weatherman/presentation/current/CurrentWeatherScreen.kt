@@ -1,6 +1,5 @@
 package com.eskeitec.apps.weatherman.presentation.current
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,22 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,74 +34,40 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.common.SetError
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
-import com.eskeitec.apps.weatherman.presentation.Screen
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
+import com.eskeitec.apps.weatherman.presentation.components.LoadingDialog
 import com.eskeitec.apps.weatherman.presentation.daysforecast.ForecastScreen
 import com.eskeitec.apps.weatherman.utils.Constants
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBGColor
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBgImage
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentWeatherScreen(
-    navController: NavHostController,
     weatherViewModel: CurrentWeatherViewModel = hiltViewModel(),
-    currentLoc: LatLng,
+    navController: NavHostController,
+    currentLocation: String,
 ) {
-    println("Viewmodel init>>>")
-    weatherViewModel.getCurrentWeatherData("${currentLoc.latitude}", "${currentLoc.longitude}")
-    val state by weatherViewModel.currentWeatherState.collectAsState()
-//    println("Viewmodel init>>> State $state")
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Weather Man") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onSecondary,
-                ),
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            Icons.Filled.Favorite,
-                            contentDescription = "Favourites",
-                        )
-                    }
-                },
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Screen.AddLocation.name)
-            }) {
-                Icon(Icons.Rounded.Add, contentDescription = "Add")
-            }
-        },
-
-    ) {
-        BodyLayout(state = state, currentLoc)
+    println("LOOO $currentLocation")
+    var currentLoc: LatLng? = if (currentLocation.isNotEmpty()) {
+        Gson().fromJson(
+            currentLocation,
+            LatLng::class.java,
+        )
+    } else {
+        return
     }
-}
+    weatherViewModel.getCurrentWeatherData("${currentLoc?.latitude}", "${currentLoc?.longitude}")
 
-@Composable
-fun BodyLayout(state: CurrentWeatherState, currentLoc: LatLng) {
+    val state: CurrentWeatherState by weatherViewModel.currentWeatherState.collectAsState()
     return when (state) {
         is CurrentWeatherState.Loading -> {
-            Box(contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = MaterialTheme.colorScheme.secondary,
-                )
-            }
+            LoadingDialog()
         }
 
         is CurrentWeatherState.Success -> {
-            if (state.data == null) {
+            if ((state as CurrentWeatherState.Success).data == null) {
                 ErrorCard(
                     modifier = Modifier.fillMaxSize(),
                     errorTitle = Constants.DEFAULT_ERROR,
@@ -130,16 +82,17 @@ fun BodyLayout(state: CurrentWeatherState, currentLoc: LatLng) {
                         .padding(horizontal = 64.dp),
                 )
             }
-            WeatherScreen(state.data!!, currentLoc)
+//            sharedViewModel.updateLocation(currentLoc, false)
+            WeatherScreen((state as CurrentWeatherState.Success).data!!, currentLoc!!)
         }
 
         is CurrentWeatherState.Error -> {
             ErrorCard(
                 modifier = Modifier.fillMaxSize(),
-                errorTitle = state.error
+                errorTitle = (state as CurrentWeatherState.Error).error
                     ?: Constants.DEFAULT_ERROR,
                 errorDescription = SetError.setErrorCard(
-                    state.error ?: Constants.DEFAULT_ERROR,
+                    (state as CurrentWeatherState.Error).error ?: Constants.DEFAULT_ERROR,
                 ),
                 errorButtonText = "Ok",
                 {},
@@ -168,7 +121,7 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                 Image(
                     modifier = Modifier
                         .fillMaxWidth(2f)
-                        .height(400.dp),
+                        .height(300.dp),
                     painter = painterResource(id = getBgImage(state.weatherType)),
                     contentDescription = "background image",
                     contentScale = ContentScale.FillWidth,
@@ -278,6 +231,7 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                 )
             }
             Divider(color = Color.White, thickness = 2.dp)
+
             ForecastScreen(currentLoc = currentLoc)
         }
     }
