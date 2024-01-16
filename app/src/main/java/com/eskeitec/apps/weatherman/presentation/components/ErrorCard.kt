@@ -57,7 +57,7 @@ fun ErrorCard(
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                         )
-                        Text(text = errorTitle, style = MaterialTheme.typography.bodySmall.copy(color = Color.White))
+                        Text(text = errorTitle, style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 Box(
@@ -78,7 +78,7 @@ fun ErrorCard(
                         ) {
                             Text(
                                 text = errorButtonText.uppercase(),
-                                style = MaterialTheme.typography.titleSmall.copy(color = Color.Black),
+                                style = MaterialTheme.typography.titleSmall.copy(color = Color.White),
                             )
                         }
                     }

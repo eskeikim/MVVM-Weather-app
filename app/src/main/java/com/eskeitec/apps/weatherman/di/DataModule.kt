@@ -8,7 +8,9 @@ import com.eskeitec.apps.weatherman.data.repository.PlacesRepository
 import com.eskeitec.apps.weatherman.data.repository.PlacesRepositoryImpl
 import com.eskeitec.apps.weatherman.data.repository.WeatherRepositoryImpl
 import com.eskeitec.apps.weatherman.domain.repository.WeatherRepository
+import com.eskeitec.apps.weatherman.domain.usecase.CityDetailsUseCase
 import com.eskeitec.apps.weatherman.domain.usecase.ForecastWeatherUseCase
+import com.eskeitec.apps.weatherman.domain.usecase.PlacesUseCase
 import com.eskeitec.apps.weatherman.domain.usecase.WeatherUseCase
 import dagger.Module
 import dagger.Provides
@@ -49,4 +51,14 @@ object DataModule {
     @Singleton
     fun providesForecastWeatherUseCase(weatherRepository: WeatherRepository): ForecastWeatherUseCase =
         ForecastWeatherUseCase(weatherRepository)
+
+    @Provides
+    @Singleton
+    fun providesPlacesUseCase(placesRepository: PlacesRepository): PlacesUseCase =
+        PlacesUseCase(placesRepository)
+
+    @Provides
+    @Singleton
+    fun providesCityDetailsUseCase(placesRepository: PlacesRepository): CityDetailsUseCase =
+        CityDetailsUseCase(placesRepository)
 }

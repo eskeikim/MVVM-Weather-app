@@ -2,7 +2,6 @@ package com.eskeitec.apps.weatherman.domain.usecase
 
 import com.eskeitec.apps.weatherman.common.Resource
 import com.eskeitec.apps.weatherman.data.models.citydetails.CityDetails
-import com.eskeitec.apps.weatherman.data.models.google_places.Prediction
 import com.eskeitec.apps.weatherman.data.repository.PlacesRepository
 import javax.inject.Inject
 
