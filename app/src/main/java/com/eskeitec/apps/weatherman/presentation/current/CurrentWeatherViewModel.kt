@@ -1,15 +1,14 @@
 package com.eskeitec.apps.weatherman.presentation.current
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eskeitec.apps.weatherman.common.Resource
 import com.eskeitec.apps.weatherman.data.datasource.local.entity.LocationEntity
-import com.eskeitec.apps.weatherman.domain.model.WeatherModel
 import com.eskeitec.apps.weatherman.domain.usecase.FavouriteLocationUseCase
 import com.eskeitec.apps.weatherman.domain.usecase.WeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -25,7 +24,9 @@ class CurrentWeatherViewModel @Inject constructor(
         MutableStateFlow<CurrentWeatherState>(CurrentWeatherState.Loading)
     val currentWeatherState = _currentWeatherState.asStateFlow()
 
-    private var _currentWeather = MutableLiveData<WeatherModel?>()
+    private var _isFavouriteAdded = MutableLiveData<Boolean>()
+    val isFavouriteAdded: LiveData<Boolean>
+        get() = _isFavouriteAdded
 
     fun getCurrentWeatherData(lat: String, lon: String) {
         _currentWeatherState.value = CurrentWeatherState.Loading
@@ -47,5 +48,10 @@ class CurrentWeatherViewModel @Inject constructor(
         viewModelScope.launch {
             favouriteLocationUseCase.invoke(locationEntity)
         }
+    }
+
+    fun isFavouriteAdded(isAdded: Boolean = true) {
+        _isFavouriteAdded.value = isAdded
+
     }
 }
