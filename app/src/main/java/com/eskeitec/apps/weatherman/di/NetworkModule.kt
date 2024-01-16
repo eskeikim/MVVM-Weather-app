@@ -1,6 +1,7 @@
 package com.eskeitec.apps.weatherman.di
 
 import com.eskeitec.apps.weatherman.BuildConfig
+import com.eskeitec.apps.weatherman.data.datasource.network.PlacesApi
 import com.eskeitec.apps.weatherman.data.datasource.network.WeatherApiService
 import dagger.Module
 import dagger.Provides
@@ -24,6 +25,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @StringWeather
     fun providesBaseUrl(): String {
         return BuildConfig.BASE_URL
     }
@@ -53,6 +55,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @OkhttpClientWeather
     fun providesOkhttpClient(
         specs: ConnectionSpec,
         certificatePinner: CertificatePinner,
@@ -74,7 +77,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(baseUrl: String, okHttp: OkHttpClient): Retrofit {
+    @RetrofitWeather
+    fun providesRetrofit(@StringWeather baseUrl: String, @OkhttpClientWeather okHttp: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttp)
@@ -84,7 +88,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesApiService(retrofit: Retrofit): WeatherApiService {
+    fun providesApiService(@RetrofitWeather retrofit: Retrofit): WeatherApiService {
         return retrofit.create(WeatherApiService::class.java)
     }
+
 }

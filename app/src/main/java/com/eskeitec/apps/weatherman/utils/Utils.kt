@@ -60,7 +60,7 @@ class Utils {
 
         fun getBGColor(weatherType: WeatherType): Color {
             return when (weatherType) {
-                WeatherType.SUNNY -> rainyBg
+                WeatherType.SUNNY -> sunnyBg
                 WeatherType.WINDLY -> sunnyBg
                 WeatherType.RAINY -> rainyBg
                 else -> cloudyBg
