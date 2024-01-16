@@ -1,7 +1,6 @@
 package com.eskeitec.apps.weatherman.di
 
 import com.eskeitec.apps.weatherman.BuildConfig
-import com.eskeitec.apps.weatherman.data.datasource.network.PlacesApi
 import com.eskeitec.apps.weatherman.data.datasource.network.WeatherApiService
 import dagger.Module
 import dagger.Provides
@@ -91,5 +90,4 @@ object NetworkModule {
     fun providesApiService(@RetrofitWeather retrofit: Retrofit): WeatherApiService {
         return retrofit.create(WeatherApiService::class.java)
     }
-
 }

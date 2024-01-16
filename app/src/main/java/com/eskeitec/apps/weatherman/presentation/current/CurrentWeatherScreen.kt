@@ -1,6 +1,5 @@
 package com.eskeitec.apps.weatherman.presentation.current
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -25,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopCenter
@@ -43,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.common.SetError
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
+import com.eskeitec.apps.weatherman.domain.model.toLocationEntity
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
 import com.eskeitec.apps.weatherman.presentation.components.LoadingDialog
 import com.eskeitec.apps.weatherman.presentation.daysforecast.ForecastScreen
@@ -67,8 +67,12 @@ fun CurrentWeatherScreen(
     } else {
         return
     }
-    weatherViewModel.getCurrentWeatherData("${currentLoc?.latitude}", "${currentLoc?.longitude}")
-
+    remember(weatherViewModel) {
+        weatherViewModel.getCurrentWeatherData(
+            "${currentLoc?.latitude}",
+            "${currentLoc?.longitude}",
+        )
+    }
     val state: CurrentWeatherState by weatherViewModel.currentWeatherState.collectAsState()
     return when (state) {
         is CurrentWeatherState.Loading -> {
@@ -92,7 +96,11 @@ fun CurrentWeatherScreen(
                 )
             }
 //            sharedViewModel.updateLocation(currentLoc, false)
-            WeatherScreen((state as CurrentWeatherState.Success).data!!, currentLoc!!)
+            WeatherScreen(
+                (state as CurrentWeatherState.Success).data!!,
+                currentLoc!!,
+                weatherViewModel,
+            )
         }
 
         is CurrentWeatherState.Error -> {
@@ -115,7 +123,12 @@ fun CurrentWeatherScreen(
 }
 
 @Composable
-fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
+fun WeatherScreen(
+    state: WeatherModel,
+    currentLoc: LatLng,
+    weatherViewModel: CurrentWeatherViewModel,
+) {
+    var isFavourite = false
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -183,14 +196,28 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                         Spacer(modifier = Modifier.padding(horizontal = 20.dp))
                         IconButton(
                             onClick = {
+                                weatherViewModel.addLocationToFavourite(state.toLocationEntity())
+                                isFavourite = true
                             },
                         ) {
-                            Icon(
-                                Icons.Outlined.Favorite,
-                                contentDescription = "Add to favourite",
-                                tint = Color.White,
-                                modifier = Modifier.size(100.dp).padding(top = 10.dp),
-                            )
+                            if (isFavourite) {
+                                Icon(
+                                    Icons.Outlined.Favorite,
+                                    contentDescription = "Add to favourite",
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .padding(top = 10.dp),
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Add to favourite",
+                                    tint = Color.Red,
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .padding(top = 10.dp),
+                                )
+                            }
                         }
                     }
                     Text(

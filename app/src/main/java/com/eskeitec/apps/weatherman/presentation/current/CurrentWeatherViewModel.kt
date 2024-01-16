@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eskeitec.apps.weatherman.common.Resource
+import com.eskeitec.apps.weatherman.data.datasource.local.entity.LocationEntity
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
+import com.eskeitec.apps.weatherman.domain.usecase.FavouriteLocationUseCase
 import com.eskeitec.apps.weatherman.domain.usecase.WeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CurrentWeatherViewModel @Inject constructor(private val weatherUseCase: WeatherUseCase) :
+class CurrentWeatherViewModel @Inject constructor(
+    private val weatherUseCase: WeatherUseCase,
+    private val favouriteLocationUseCase: FavouriteLocationUseCase,
+) :
     ViewModel() {
     private var _currentWeatherState =
         MutableStateFlow<CurrentWeatherState>(CurrentWeatherState.Loading)
@@ -35,6 +40,12 @@ class CurrentWeatherViewModel @Inject constructor(private val weatherUseCase: We
                     _currentWeatherState.value =
                         CurrentWeatherState.Error(response.message)
             }
+        }
+    }
+
+    fun addLocationToFavourite(locationEntity: LocationEntity) {
+        viewModelScope.launch {
+            favouriteLocationUseCase.invoke(locationEntity)
         }
     }
 }

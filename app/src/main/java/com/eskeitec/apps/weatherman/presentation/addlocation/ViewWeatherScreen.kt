@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -78,10 +79,12 @@ fun ViewWeatherScreen(
                 .padding(innerPaddding),
 
         ) {
-            weatherViewModel.getCurrentWeatherData(
-                "${currentLoc?.latitude}",
-                "${currentLoc?.longitude}",
-            )
+            remember(weatherViewModel) {
+                weatherViewModel.getCurrentWeatherData(
+                    "${currentLoc?.latitude}",
+                    "${currentLoc?.longitude}",
+                )
+            }
 
             val state: CurrentWeatherState by weatherViewModel.currentWeatherState.collectAsState()
             when (state) {
@@ -108,6 +111,7 @@ fun ViewWeatherScreen(
                     WeatherScreen(
                         (state as CurrentWeatherState.Success).data!!,
                         currentLoc!!,
+                        weatherViewModel,
                     )
                 }
 
