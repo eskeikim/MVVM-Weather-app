@@ -1,5 +1,6 @@
 package com.eskeitec.apps.weatherman.data.repository
 
+import androidx.lifecycle.LiveData
 import com.eskeitec.apps.weatherman.common.Resource
 import com.eskeitec.apps.weatherman.data.datasource.local.datasource.LocationLocalDataSource
 import com.eskeitec.apps.weatherman.data.datasource.local.entity.LocationEntity
@@ -57,5 +58,13 @@ class WeatherRepositoryImpl @Inject constructor(
 
     override suspend fun insertFavouriteLocation(locationEntity: LocationEntity) {
         localDataSource.insertLocation(locationEntity)
+    }
+
+    override fun getAllFavouriteLocationsL(): LiveData<List<LocationEntity>> {
+        return localDataSource.getAllLocationsL()
+    }
+
+    override suspend fun getAllFavouriteLocations(): List<LocationEntity> {
+        return localDataSource.getAllLocations()
     }
 }

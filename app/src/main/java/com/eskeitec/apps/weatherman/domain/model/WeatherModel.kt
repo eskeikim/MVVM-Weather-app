@@ -6,6 +6,8 @@ import com.eskeitec.apps.weatherman.data.models.forecast.ForecastResponse
 import com.eskeitec.apps.weatherman.utils.EpochConverter
 import com.eskeitec.apps.weatherman.utils.Utils
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.HOUR_TIME_FORMAT
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import java.util.Calendar
 
 data class WeatherModel(
@@ -18,6 +20,7 @@ data class WeatherModel(
     val country: String,
     val date: String?,
     val time: String?,
+    val latLng: String,
 
 )
 
@@ -32,6 +35,7 @@ fun CurrentWeatherResponse.toWeatherModel(): WeatherModel {
     val temp = this.main?.temp?.toInt()
     val minTemp = this.main?.tempMin?.toInt()
     val maxTemp = this.main?.tempMax?.toInt()
+    val latLng = Gson().toJson(LatLng(this.coord?.lat ?: 0.0, this.coord?.lon ?: 0.0))
     return WeatherModel(
         id = this.id?.toLong()!!,
         temp = "$temp",
@@ -47,6 +51,7 @@ fun CurrentWeatherResponse.toWeatherModel(): WeatherModel {
         date = EpochConverter.readTimestamp(
             this.dt ?: Calendar.getInstance().timeInMillis,
         ),
+        latLng = latLng,
 
     )
 }
@@ -62,6 +67,7 @@ fun WeatherModel.toLocationEntity(): LocationEntity {
         time = "${this.time}",
         date = "${this.date}",
         daysForecast = emptyList(),
+        latlog = this.latLng,
     )
 }
 
@@ -74,6 +80,8 @@ fun ForecastResponse.toForecastModel(): ForecastModel {
         val temp = item.main?.temp?.toInt()
         val minTemp = item.main?.tempMin?.toInt()
         val maxTemp = item.main?.tempMax?.toInt()
+        val latLng =
+            Gson().toJson(LatLng(this.city?.coord?.lat ?: 0.0, this.city?.coord?.lon ?: 0.0))
 
         val model = WeatherModel(
             id = item.dt ?: -1L,
@@ -90,6 +98,7 @@ fun ForecastResponse.toForecastModel(): ForecastModel {
             date = EpochConverter.readTimestamp(
                 item.dt ?: Calendar.getInstance().timeInMillis,
             ),
+            latLng = latLng,
 
         )
         weatherList.add(model)

@@ -10,7 +10,8 @@ class LocationLocalDataSource @Inject constructor(private val locationDao: Locat
 
     suspend fun insertLocation(location: LocationEntity) = locationDao.insertLocation(location)
 
-    fun getAllLocations(): LiveData<List<LocationEntity>> = locationDao.getAllLocations()
+    fun getAllLocationsL(): LiveData<List<LocationEntity>> = locationDao.getAllLocationsL()
+    suspend fun getAllLocations(): List<LocationEntity> = locationDao.getAllLocations()
 
     fun getAllLocationsFlow(): Flow<List<LocationEntity>> = locationDao.getAllLocationsFlow()
 

@@ -10,7 +10,7 @@ interface PlacesApi {
     @GET("maps/api/place/autocomplete/json")
     suspend fun getPlaces(
         @Query("key") key: String = BuildConfig.MAPS_API_KEY,
-        @Query("type") types: String = "address",
+        @Query("type") types: String = "locality",
         @Query("input") input: String,
     ): GooglePlacesResponse
 

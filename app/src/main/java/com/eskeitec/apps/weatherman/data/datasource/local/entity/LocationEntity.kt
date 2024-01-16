@@ -20,6 +20,7 @@ class LocationEntity(
     val maxTemp: String,
     @ColumnInfo(name = "days_forecast")
     val daysForecast: List<WeatherModel>,
+    val latlog: String,
     val time: String,
     val date: String,
 )

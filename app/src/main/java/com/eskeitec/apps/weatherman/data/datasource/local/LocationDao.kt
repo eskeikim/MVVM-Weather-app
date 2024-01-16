@@ -16,7 +16,10 @@ interface LocationDao {
     suspend fun insertLocation(location: LocationEntity)
 
     @Query("SELECT * FROM location_entity")
-    fun getAllLocations(): LiveData<List<LocationEntity>>
+    fun getAllLocationsL(): LiveData<List<LocationEntity>>
+
+    @Query("SELECT * FROM location_entity")
+    suspend fun getAllLocations(): List<LocationEntity>
 
     @Query("SELECT * FROM location_entity")
     fun getAllLocationsFlow(): Flow<List<LocationEntity>>

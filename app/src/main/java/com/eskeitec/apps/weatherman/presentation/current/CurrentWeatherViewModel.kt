@@ -29,7 +29,7 @@ class CurrentWeatherViewModel @Inject constructor(
 
     fun getCurrentWeatherData(lat: String, lon: String) {
         _currentWeatherState.value = CurrentWeatherState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val response = weatherUseCase.invoke(lat, lon)
             when (response) {
                 is Resource.Success ->

@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.presentation.Screen
@@ -52,10 +53,13 @@ fun HomeScreen(
                     actionIconContentColor = MaterialTheme.colorScheme.onSecondary,
                 ),
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.ListFavouritesScreen.name)
+                    }) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Favourites",
+                            tint = Color.Red,
                         )
                     }
                 },
