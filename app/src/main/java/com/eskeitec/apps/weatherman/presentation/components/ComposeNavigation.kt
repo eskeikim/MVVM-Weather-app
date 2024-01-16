@@ -49,7 +49,15 @@ fun ComposeNavigation(defaultLocation: LatLng) {
                 backStackEntry.sharedViewModel<SharedViewModel>(navController)
             AddLocationScreen(navController, sharedViewModel = sharedViewModel)
         }
-        composable(route = Screen.ViewWeatherScreen.name) { backStackEntry ->
+        composable(
+            route = "${Screen.ViewWeatherScreen.name}/{latlon}",
+            arguments = listOf(
+                navArgument("latlon") {
+                    type =
+                        NavType.StringType
+                },
+            ),
+        ) { backStackEntry ->
             val latlon = backStackEntry.arguments?.getString("latlon") ?: ""
             ViewWeatherScreen(navController, currentLocation = latlon)
         }

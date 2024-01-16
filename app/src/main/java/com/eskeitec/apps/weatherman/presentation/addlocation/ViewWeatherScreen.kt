@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.common.SetError
+import com.eskeitec.apps.weatherman.presentation.Screen
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
 import com.eskeitec.apps.weatherman.presentation.components.LoadingDialog
 import com.eskeitec.apps.weatherman.presentation.current.CurrentWeatherState
@@ -52,11 +53,11 @@ fun ViewWeatherScreen(
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
-            title = { Text(text = "View Selected Location") },
+            title = { Text(text = "Selected Location") },
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        navController.navigateUp()
+                        navController.popBackStack(Screen.Home.name, false)
                     },
                 ) {
                     Icon(

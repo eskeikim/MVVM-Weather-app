@@ -7,6 +7,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eskeitec.apps.weatherman.data.models.google_places.Prediction
+import com.eskeitec.apps.weatherman.domain.usecase.CityDetailsUseCase
 import com.eskeitec.apps.weatherman.domain.usecase.PlacesUseCase
 import com.eskeitec.apps.weatherman.presentation.current.CityDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,11 +18,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddLocationViewModel @Inject constructor(
     private val placesUsecase: PlacesUseCase,
+    private val cityDetailsUseCase: CityDetailsUseCase,
 ) :
     ViewModel() {
     val loading = mutableStateOf(false)
@@ -55,6 +58,9 @@ class AddLocationViewModel @Inject constructor(
 
     fun onPlaceClick(value: String) {
         _cityDetails.value = CityDetailsState.Loading
-        searchQuery = value
+        viewModelScope.launch {
+            val cityDetails = cityDetailsUseCase.invoke(value)
+            _cityDetails.value = CityDetailsState.Success(cityDetails)
+        }
     }
 }
