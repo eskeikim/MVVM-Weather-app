@@ -5,6 +5,14 @@ WeatherMan is an Android app that fetches Weather updates for currrent or any se
  3. Display weather data for search location.
  4. Favourite screen- contains a list of locations/cities that users have added to favourites- stored in the Room database and can be accessed offline.
 
+## How to build the project
+  * Clone this project and open it in android studio
+  * Under local.properties add these 3 keys/value and URL:
+    * [OpenWeather API Key] https://openweathermap.org/api- `OPEN_API_KEY="354ffb1ef8f014d50df5e29ee35b7a7a"`
+    * [GoogleMaps Api Key] https://developers.google.com/maps/documentation/places/android-sdk/overview - `MAPS_API_KEY="AIzaSyDGQf6-kILPozd704rqcjTWJHQOteeQxRY"`
+    * [OpenWeather base URL] https://api.openweathermap.org/data/2.5/ - `BASE_URL="https://api.openweathermap.org/data/2.5/"`
+  * Run the app
+    
 ## 📐✏️ Architecture
  The app is built with the Model-View-ViewModel (MVVM) architecture with Repository pattern, which separates the app's user interface, logic, and data:
  
