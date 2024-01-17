@@ -49,10 +49,7 @@ class AddLocationViewModel @Inject constructor(
     fun onPlaceValueChanged(value: String) {
         searchQuery = value
         if (searchQuery != value) {
-            println("SEARCH >>> $value")
             searchQuery = value
-        } else {
-            println("SEARCH >>> FINAL$value")
         }
     }
 

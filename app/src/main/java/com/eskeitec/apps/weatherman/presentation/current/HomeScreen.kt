@@ -15,10 +15,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.presentation.Screen
-import com.eskeitec.apps.weatherman.presentation.shared.SharedViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 
@@ -28,20 +26,7 @@ import com.google.gson.Gson
 fun HomeScreen(
     navController: NavHostController,
     defaultLocation: LatLng,
-    currentViewModel: CurrentWeatherViewModel = hiltViewModel(),
-    sharedViewModel: SharedViewModel,
 ) {
-    println("Viewmodel init>>>")
-//    println("Viewmodel init>>> State $state")
-//    var currentLoc = defaultLocation
-//    var loc = navController.currentBackStackEntry?.savedStateHandle?.get<String>("cood")
-//    if (loc != null) {
-//        currentLoc = Gson().fromJson(loc, LatLng::class.java)
-//        loc = null
-//    }
-    sharedViewModel.updateLocation(defaultLocation, true)
-    println("LOCATION selected>>> :: current $defaultLocation")
-
     Scaffold(
         topBar = {
             TopAppBar(

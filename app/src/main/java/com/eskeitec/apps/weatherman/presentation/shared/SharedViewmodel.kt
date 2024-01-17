@@ -18,7 +18,6 @@ class SharedViewModel : ViewModel() {
 
     fun updateLocation(newLocation: LatLng, isDefault: Boolean = false) {
         _currentLocation.value = CurrentLocationState.Selected(newLocation)
-        println("LOC VM Upd $newLocation")
         if (isDefault) _defaultLocation.value = newLocation
     }
 

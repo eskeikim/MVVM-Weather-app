@@ -33,7 +33,6 @@ class MainActivityViewModel @Inject constructor(
             }
 
             PermissionEvent.Revoked -> {
-                println("State revoked VM")
                 _viewState.value = ViewState.RevokedPermissions
             }
         }

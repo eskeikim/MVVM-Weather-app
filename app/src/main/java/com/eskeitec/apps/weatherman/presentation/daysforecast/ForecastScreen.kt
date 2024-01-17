@@ -39,7 +39,6 @@ fun ForecastScreen(
     }
     val state = forecastViewModel.forecastWeather.observeAsState().value
     if (state == null || state.weatherModel.isEmpty()) return
-    println("FORECAST ${state.city} ${state.weatherModel?.first()}")
 
     Box(modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp)) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {

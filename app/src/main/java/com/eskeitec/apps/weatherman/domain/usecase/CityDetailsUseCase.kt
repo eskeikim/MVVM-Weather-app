@@ -9,7 +9,6 @@ class CityDetailsUseCase @Inject constructor(private val placesRepository: Place
     suspend fun invoke(address: String): CityDetails? {
         val details: CityDetails? = when (val response = placesRepository.getCityDetails(address)) {
             is Resource.Success -> {
-                println("Loaded details data ${response.data}")
                 response.data
             }
 

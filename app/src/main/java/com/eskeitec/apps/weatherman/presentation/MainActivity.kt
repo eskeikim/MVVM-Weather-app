@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
                     with(viewState) {
                         when (this) {
                             ViewState.Loading -> {
-                                println("State Loading")
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center,
@@ -85,7 +84,6 @@ class MainActivity : ComponentActivity() {
                             }
 
                             ViewState.RevokedPermissions -> {
-                                println("State Revoked")
                                 Column(
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -114,7 +112,6 @@ class MainActivity : ComponentActivity() {
                             }
 
                             is ViewState.Success -> {
-                                println("State Success")
                                 val currentLoc =
                                     LatLng(
                                         this.location?.latitude ?: 0.0,

@@ -17,12 +17,6 @@ class ForecastWeatherViewModel @Inject constructor(private val weatherUseCase: F
     val forecastWeather: LiveData<ForecastModel?>
         get() = _forecastWeather
 
-//    init {
-//        val lat = "-1.286389"
-//        val lon = "36.817223"
-//        getForecastWeatherData(lat, lon)
-//    }
-
     fun getForecastWeatherData(lat: String, lon: String) {
         viewModelScope.launch {
             val response = weatherUseCase.invoke(lat, lon)

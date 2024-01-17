@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -29,7 +30,7 @@ object PlacesNetworkModule {
     @OkhttpClientPlaces
     fun providesPlacesOkhttpClient(): OkHttpClient {
         val logInterceptor =
-            HttpLoggingInterceptor { message -> println(message = message) }.setLevel(
+            HttpLoggingInterceptor { message -> Timber.d(message = message) }.setLevel(
                 if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BODY,
             )
 

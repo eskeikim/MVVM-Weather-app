@@ -16,11 +16,9 @@ class PlacesRepositoryImpl @Inject constructor(
     override suspend fun getPlaces(input: String): Resource<List<Prediction>> {
         val response = placesRemoteDataSource.getPlaces(input = input)
         return try {
-            println("Loaded Repos data ${response.status}")
             if (response.predictions == null) {
                 Resource.Error(Constants.DEFAULT_ERROR)
             } else {
-                println("Loaded Repos data ${response.predictions.size} :: ${response.predictions.first()}")
                 Resource.Success(response.predictions)
             }
         } catch (e: Exception) {
@@ -31,11 +29,9 @@ class PlacesRepositoryImpl @Inject constructor(
     override suspend fun getCityDetails(placeId: String): Resource<CityDetails> {
         val response = placesRemoteDataSource.getCityDetails(placeId = placeId)
         return try {
-            println("Loaded Repos data ${response.status}")
             if (response.result == null) {
                 Resource.Error(Constants.DEFAULT_ERROR)
             } else {
-                println("Loaded Repos data ${response.result}}")
                 Resource.Success(response.result)
             }
         } catch (e: Exception) {

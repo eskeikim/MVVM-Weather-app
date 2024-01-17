@@ -61,7 +61,6 @@ fun CurrentWeatherScreen(
     navController: NavHostController,
     currentLocation: String,
 ) {
-    println("LOOO $currentLocation")
     var currentLoc: LatLng? = if (currentLocation.isNotEmpty()) {
         Gson().fromJson(
             currentLocation,

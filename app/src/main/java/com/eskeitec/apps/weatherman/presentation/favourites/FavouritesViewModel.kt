@@ -32,7 +32,6 @@ class FavouritesViewModel @Inject constructor(
     private fun getAllLocations() {
         viewModelScope.launch {
             val response = getFavouriteLocationsUseCase.invoke()
-            println("response local fav ${response?.size}")
             _favourites.value = response
         }
     }

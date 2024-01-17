@@ -1,6 +1,5 @@
 package com.eskeitec.apps.weatherman.presentation.addlocation
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,9 +32,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -58,7 +53,6 @@ import com.google.gson.Gson
 fun AddLocationScreen(
     navController: NavHostController,
     viewModel: AddLocationViewModel = hiltViewModel(),
-    sharedViewModel: SharedViewModel,
 ) {
     val state = viewModel.loading.value
     if (state) {
@@ -144,7 +138,7 @@ fun AddLocationScreen(
                         )
                         Column {
                             Text(text = place.description.toString())
-                            Text(text = place.structuredFormatting?.mainText?:"")
+                            Text(text = place.structuredFormatting?.mainText ?: "")
                         }
                     }
                 }
@@ -152,7 +146,6 @@ fun AddLocationScreen(
             val cityDetailsState = viewModel.cityDetails.collectAsState().value
             when (cityDetailsState) {
                 is CityDetailsState.Loading -> {
-                    println("Loading.... Get Coodinates.")
                     LoadingDialog()
                 }
 
@@ -160,7 +153,6 @@ fun AddLocationScreen(
                     val data = cityDetailsState.data
 
                     if (data == null) {
-                        println("Error.... Get ERROR.")
                         ErrorCard(
                             modifier = Modifier.fillMaxSize(),
                             errorTitle = Constants.DEFAULT_ERROR,
@@ -177,7 +169,6 @@ fun AddLocationScreen(
                     } else {
                         val selectedLocation =
                             LatLng(data.geometry?.location?.lat!!, data.geometry.location.lng!!)
-                        println("Success .... Get $selectedLocation.")
 
                         val loc = Gson().toJson(selectedLocation)
                         navController.navigate(

@@ -29,7 +29,6 @@ class WeatherRepositoryImpl @Inject constructor(
             if (response.isSuccessful && response.body() != null) {
                 val data = response.body()
                 val cWeather = data?.toWeatherModel()
-                println("Current Weather == $cWeather")
                 Resource.Success(cWeather)
             } else {
                 Resource.Error(Constants.DEFAULT_ERROR)
@@ -46,7 +45,6 @@ class WeatherRepositoryImpl @Inject constructor(
             if (response.isSuccessful && response.body() != null) {
                 val data = response.body()
                 val cWeather = data?.toForecastModel()
-                println("Current Weather == $cWeather")
                 Resource.Success(cWeather)
             } else {
                 Resource.Error(Constants.DEFAULT_ERROR)
