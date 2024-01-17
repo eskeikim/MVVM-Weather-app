@@ -11,6 +11,7 @@ import com.eskeitec.apps.weatherman.presentation.addlocation.AddLocationScreen
 import com.eskeitec.apps.weatherman.presentation.addlocation.ViewWeatherScreen
 import com.eskeitec.apps.weatherman.presentation.current.CurrentWeatherScreen
 import com.eskeitec.apps.weatherman.presentation.current.HomeScreen
+import com.eskeitec.apps.weatherman.presentation.favourites.ListFavouritesScreen
 import com.eskeitec.apps.weatherman.presentation.shared.SharedViewModel
 import com.eskeitec.apps.weatherman.utils.sharedViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -60,6 +61,9 @@ fun ComposeNavigation(defaultLocation: LatLng) {
         ) { backStackEntry ->
             val latlon = backStackEntry.arguments?.getString("latlon") ?: ""
             ViewWeatherScreen(navController, currentLocation = latlon)
+        }
+        composable(route = Screen.ListFavouritesScreen.name) { backStackEntry ->
+            ListFavouritesScreen(navController)
         }
     }
 }

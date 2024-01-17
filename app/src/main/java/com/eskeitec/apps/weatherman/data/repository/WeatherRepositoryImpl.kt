@@ -1,6 +1,9 @@
 package com.eskeitec.apps.weatherman.data.repository
 
+import androidx.lifecycle.LiveData
 import com.eskeitec.apps.weatherman.common.Resource
+import com.eskeitec.apps.weatherman.data.datasource.local.datasource.LocationLocalDataSource
+import com.eskeitec.apps.weatherman.data.datasource.local.entity.LocationEntity
 import com.eskeitec.apps.weatherman.data.datasource.network.RemoteDataSource
 import com.eskeitec.apps.weatherman.domain.model.ForecastModel
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
@@ -11,7 +14,10 @@ import com.eskeitec.apps.weatherman.utils.Constants
 import java.lang.Exception
 import javax.inject.Inject
 
-class WeatherRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) :
+class WeatherRepositoryImpl @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocationLocalDataSource,
+) :
     WeatherRepository {
     override suspend fun getCurrentWeather(
         lat: String,
@@ -48,5 +54,21 @@ class WeatherRepositoryImpl @Inject constructor(private val remoteDataSource: Re
         } catch (exception: Exception) {
             Resource.Error(Constants.DEFAULT_ERROR)
         }
+    }
+
+    override suspend fun insertFavouriteLocation(locationEntity: LocationEntity) {
+        localDataSource.insertLocation(locationEntity)
+    }
+
+    override fun getAllFavouriteLocationsL(): LiveData<List<LocationEntity>> {
+        return localDataSource.getAllLocationsL()
+    }
+
+    override suspend fun getAllFavouriteLocations(): List<LocationEntity> {
+        return localDataSource.getAllLocations()
+    }
+
+    override suspend fun removeLocation(locationEntity: LocationEntity) {
+        localDataSource.removeLocation(locationEntity)
     }
 }

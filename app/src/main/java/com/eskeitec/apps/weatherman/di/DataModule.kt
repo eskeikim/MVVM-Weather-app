@@ -1,5 +1,6 @@
 package com.eskeitec.apps.weatherman.di
 
+import com.eskeitec.apps.weatherman.data.datasource.local.datasource.LocationLocalDataSource
 import com.eskeitec.apps.weatherman.data.datasource.network.PlacesApi
 import com.eskeitec.apps.weatherman.data.datasource.network.PlacesRemoteDataSource
 import com.eskeitec.apps.weatherman.data.datasource.network.RemoteDataSource
@@ -34,8 +35,11 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun providesWeatherRepository(remoteDataSource: RemoteDataSource): WeatherRepository =
-        WeatherRepositoryImpl(remoteDataSource)
+    fun providesWeatherRepository(
+        remoteDataSource: RemoteDataSource,
+        localDataSource: LocationLocalDataSource,
+    ): WeatherRepository =
+        WeatherRepositoryImpl(remoteDataSource, localDataSource)
 
     @Provides
     @Singleton

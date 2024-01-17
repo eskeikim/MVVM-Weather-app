@@ -60,7 +60,7 @@ class AddLocationViewModel @Inject constructor(
         _cityDetails.value = CityDetailsState.Loading
         viewModelScope.launch {
             val cityDetails = cityDetailsUseCase.invoke(value)
-            _cityDetails.value = CityDetailsState.Success(cityDetails)
+            if (cityDetails != null) _cityDetails.value = CityDetailsState.Success(cityDetails)
         }
     }
 }

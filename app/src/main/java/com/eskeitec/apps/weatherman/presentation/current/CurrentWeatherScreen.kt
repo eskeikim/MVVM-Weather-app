@@ -6,16 +6,26 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopCenter
@@ -34,9 +44,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eskeitec.apps.weatherman.common.SetError
 import com.eskeitec.apps.weatherman.domain.model.WeatherModel
+import com.eskeitec.apps.weatherman.domain.model.toLocationEntity
 import com.eskeitec.apps.weatherman.presentation.components.ErrorCard
 import com.eskeitec.apps.weatherman.presentation.components.LoadingDialog
 import com.eskeitec.apps.weatherman.presentation.daysforecast.ForecastScreen
+import com.eskeitec.apps.weatherman.presentation.favourites.FavouritesViewModel
 import com.eskeitec.apps.weatherman.utils.Constants
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBGColor
 import com.eskeitec.apps.weatherman.utils.Utils.Companion.getBgImage
@@ -58,8 +70,12 @@ fun CurrentWeatherScreen(
     } else {
         return
     }
-    weatherViewModel.getCurrentWeatherData("${currentLoc?.latitude}", "${currentLoc?.longitude}")
-
+    remember(weatherViewModel) {
+        weatherViewModel.getCurrentWeatherData(
+            "${currentLoc?.latitude}",
+            "${currentLoc?.longitude}",
+        )
+    }
     val state: CurrentWeatherState by weatherViewModel.currentWeatherState.collectAsState()
     return when (state) {
         is CurrentWeatherState.Loading -> {
@@ -82,8 +98,11 @@ fun CurrentWeatherScreen(
                         .padding(horizontal = 64.dp),
                 )
             }
-//            sharedViewModel.updateLocation(currentLoc, false)
-            WeatherScreen((state as CurrentWeatherState.Success).data!!, currentLoc!!)
+            WeatherScreen(
+                (state as CurrentWeatherState.Success).data!!,
+                currentLoc!!,
+                weatherViewModel,
+            )
         }
 
         is CurrentWeatherState.Error -> {
@@ -106,7 +125,13 @@ fun CurrentWeatherScreen(
 }
 
 @Composable
-fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
+fun WeatherScreen(
+    state: WeatherModel,
+    currentLoc: LatLng,
+    weatherViewModel: CurrentWeatherViewModel,
+    favouritesViewModel: FavouritesViewModel = hiltViewModel(),
+) {
+    val isFavourite = favouritesViewModel.isFavouriteAdded.observeAsState().value
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +160,6 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                     Text(
                         text = "${state.city} ${state.country}",
                         modifier = Modifier
-                            .align(CenterHorizontally)
                             .padding(vertical = 10.dp),
                         style = TextStyle(
                             fontSize = 30.sp,
@@ -159,20 +183,52 @@ fun WeatherScreen(state: WeatherModel, currentLoc: LatLng) {
                         color = Color.White,
                         textAlign = TextAlign.Center,
                     )
-
-                    Text(
-                        text = "${state.temp}º",
-                        modifier = Modifier
-                            .align(CenterHorizontally)
-                            .padding(vertical = 0.dp),
-                        style = TextStyle(
-                            fontSize = 50.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontFamily = FontFamily.SansSerif,
-                        ),
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                    )
+                    Row(modifier = Modifier.padding(), horizontalArrangement = Arrangement.Center) {
+                        Text(
+                            text = "${state.temp}º",
+                            modifier = Modifier
+                                .padding(vertical = 0.dp),
+                            style = TextStyle(
+                                fontSize = 50.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontFamily = FontFamily.SansSerif,
+                            ),
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 20.dp))
+                        IconButton(
+                            onClick = {
+                                if (isFavourite == true) {
+                                    favouritesViewModel.isFavouriteRemoved(state.toLocationEntity())
+                                } else {
+                                    favouritesViewModel.addLocationToFavourite(
+                                        state.toLocationEntity(),
+                                    )
+                                }
+                            },
+                        ) {
+                            if (isFavourite == true) {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Add to favourite",
+                                    tint = Color.Red,
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .padding(top = 10.dp),
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Outlined.FavoriteBorder,
+                                    contentDescription = "Add to favourite",
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .padding(top = 10.dp),
+                                    tint = Color.LightGray,
+                                )
+                            }
+                        }
+                    }
                     Text(
                         text = state.weatherType.name,
                         modifier = Modifier

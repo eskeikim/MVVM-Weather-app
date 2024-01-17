@@ -1,6 +1,7 @@
 package com.eskeitec.apps.weatherman.data.repository
 
 import com.eskeitec.apps.weatherman.common.Resource
+import com.eskeitec.apps.weatherman.data.datasource.local.datasource.LocationLocalDataSource
 import com.eskeitec.apps.weatherman.data.datasource.network.PlacesRemoteDataSource
 import com.eskeitec.apps.weatherman.data.models.citydetails.CityDetails
 import com.eskeitec.apps.weatherman.data.models.google_places.Prediction
@@ -8,7 +9,9 @@ import com.eskeitec.apps.weatherman.utils.Constants
 import java.lang.Exception
 import javax.inject.Inject
 
-class PlacesRepositoryImpl @Inject constructor(private val placesRemoteDataSource: PlacesRemoteDataSource) :
+class PlacesRepositoryImpl @Inject constructor(
+    private val placesRemoteDataSource: PlacesRemoteDataSource,
+) :
     PlacesRepository {
     override suspend fun getPlaces(input: String): Resource<List<Prediction>> {
         val response = placesRemoteDataSource.getPlaces(input = input)
