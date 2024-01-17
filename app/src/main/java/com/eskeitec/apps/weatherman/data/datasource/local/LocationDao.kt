@@ -25,7 +25,7 @@ interface LocationDao {
     fun getAllLocationsFlow(): Flow<List<LocationEntity>>
 
     @Query("SELECT * FROM location_entity WHERE location_id=:locationId")
-    fun getLocation(locationId: String): LiveData<LocationEntity>
+    fun getLocation(locationId: Int): LiveData<LocationEntity>
 
     @Delete
     suspend fun removeLocation(location: LocationEntity)
