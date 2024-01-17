@@ -1,5 +1,5 @@
 ##  Jetpack Compose MVVM-WeatherMan App
-WeatherMan is an Android app that fetches Weather updates for currrent or any selected location with the new mordern UI tool Jetpack Compose. It uses openweathermap API. It has 4 screens:
+WeatherMan is an Android app that fetches Weather updates for currrent or any selected location with the new mordern UI tool Jetpack Compose. It uses openweathermap API to fetch weather data and Places API to fetch cities' geolocation. It has 4 screens:
  1. Fetches and displays weather data for a city for the day and also lists weather forecasts for the next 5 days in 3-hour interval.
  2. Search page - users can search for any city and display its weather data.
  3. Display weather data for search location.
@@ -32,7 +32,8 @@ WeatherMan is an Android app that fetches Weather updates for currrent or any se
   * Timber- A logger with a small, extensible API which provides utility on top of Android's normal Log class.
   * JsonToKotlin Model- an android studio plugin to convert JSON string to Kotlin model using GSON
 
-![mvvm](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/31eef8f1-ff20-4658-90a2-0c5587e4746d)
+![mvvm](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/eb70c54e-d9d8-4e5c-9e52-f2c890d03e2c)
+
 
 📱 Screenshots
 
@@ -40,9 +41,7 @@ WeatherMan is an Android app that fetches Weather updates for currrent or any se
 ![Screenshot_20240117_075319](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/b70ff6b5-e151-4f02-bfc5-af25748a6027)
 ![sanfra-sunny](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/abd433ee-b60b-4bea-ab87-87c0b8cf5484)
 ![portland](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/b4d71698-f33d-4f6a-8c70-516c4ee32e25)
-![nairobi favourite](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/46fbaad1-8c7a-41de-aaf3-58847d91e8eb)
 ![nair](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/18f52f27-2efe-4248-8661-a4bd1433119a)
-![lusaka](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/bb01bcaa-272f-4208-9113-2beaf7a3fe59)
 ![lusaka-favourite](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/eefe59f8-cc63-4966-af82-ae46e3d9fc90)
 ![favourite](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/9214192e-08ae-4d32-9c0c-246f82113456)
 
