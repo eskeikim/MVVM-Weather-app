@@ -8,6 +8,8 @@ WeatherMan is an Android app that fetches Weather updates for currrent or any se
 ## 📐✏️ Architecture
  The app is built with the Model-View-ViewModel (MVVM) architecture with Repository pattern, which separates the app's user interface, logic, and data:
  
+![mvvm](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/eb70c54e-d9d8-4e5c-9e52-f2c890d03e2c)
+
  * Model: Represents the data and the business logic of the app. It's the actual data and data sources, like databases or network requests.
  * View: Represents the UI of the app. In your app, it would be the Jetpack Compose components that display the weather data to the user.
  * ViewModel: It holds the data that the View needs, exposing this data through StateFlow.
@@ -31,8 +33,6 @@ WeatherMan is an Android app that fetches Weather updates for currrent or any se
   * Logging Interceptor - An OkHttp interceptor which logs HTTP request and response data.
   * Timber- A logger with a small, extensible API which provides utility on top of Android's normal Log class.
   * JsonToKotlin Model- an android studio plugin to convert JSON string to Kotlin model using GSON
-
-![mvvm](https://github.com/eskeikim/MVVM-Weather-app/assets/30348600/eb70c54e-d9d8-4e5c-9e52-f2c890d03e2c)
 
 
 📱 Screenshots
