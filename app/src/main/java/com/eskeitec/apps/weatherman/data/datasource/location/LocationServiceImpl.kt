@@ -1,11 +1,11 @@
 package com.eskeitec.apps.weatherman.data.datasource.location
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.content.Context
-import android.os.Build
+import android.content.pm.PackageManager
 import android.os.Looper
 import android.util.Log
-import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import com.eskeitec.apps.weatherman.common.extension.hasLocationPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -22,8 +22,6 @@ class LocationServiceImpl @Inject constructor(
     private val context: Context,
     private val locationClient: FusedLocationProviderClient,
 ) : LocationService {
-    @SuppressLint("MissingPermission")
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun requestLocationUpdates(): Flow<LatLng?> = callbackFlow {
         if (!context.hasLocationPermission()) {
             trySend(null)
@@ -44,14 +42,25 @@ class LocationServiceImpl @Inject constructor(
             }
         }
 
-        locationClient.requestLocationUpdates(
-            request,
-            locationCallback,
-            Looper.getMainLooper(),
-        )
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationClient.requestLocationUpdates(
+                request,
+                locationCallback,
+                Looper.getMainLooper(),
+            )
 
-        awaitClose {
-            locationClient.removeLocationUpdates(locationCallback)
+            awaitClose {
+                locationClient.removeLocationUpdates(locationCallback)
+            }
+        } else {
+            trySend(null)
         }
     }
 

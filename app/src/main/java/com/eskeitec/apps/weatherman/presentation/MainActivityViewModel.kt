@@ -1,7 +1,5 @@
 package com.eskeitec.apps.weatherman.presentation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eskeitec.apps.weatherman.domain.usecase.GetLocationUseCase
@@ -13,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.S)
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase,

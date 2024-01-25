@@ -10,6 +10,5 @@ import javax.inject.Inject
 class GetLocationUseCase @Inject constructor(
     private val locationService: LocationService,
 ) {
-    @RequiresApi(Build.VERSION_CODES.S)
     operator fun invoke(): Flow<LatLng?> = locationService.requestLocationUpdates()
 }
